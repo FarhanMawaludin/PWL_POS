@@ -27,7 +27,7 @@
 
         </table> --}}
 
-        {{-- <table border="1" cellpadding="2" cellspacing="0">
+        <table border="1" cellpadding="2" cellspacing="0">
             <tr>
                 <th>ID</th>
                 <th>Username</th>
@@ -40,16 +40,16 @@
                     <td>{{$data->nama}}</td>
                     <td>{{$data->level_id}}</td>
                 </tr>
-        </table> --}}
+        </table>
 
-        <table border="1" cellpadding="2" cellspacing="0">
+        {{-- <table border="1" cellpadding="2" cellspacing="0">
             <tr>
                 <th>Jumlah</th>
             </tr>
             <tr>
                 <td>{{$data}}</td>    
             </tr>            
-        </table>
+        </table> --}}
     </body>
 
 </html>
