@@ -210,53 +210,81 @@ class UserController extends Controller
     }
 
     public function update_ajax(Request $request, $id)
-    {
-    // Cek apakah request berasal dari AJAX
-    if ($request->ajax() || $request->wantsJson()) {
-        $rules = [
-            'level_id' => 'required|integer',
-            'username' => 'required|max:20|unique:m_user,username,' . $id . ',user_id',
-            'nama'     => 'required|max:100',
-            'password' => 'nullable|min:6|max:20'
-        ];
+        {
+        // Cek apakah request berasal dari AJAX
+        if ($request->ajax() || $request->wantsJson()) {
+            $rules = [
+                'level_id' => 'required|integer',
+                'username' => 'required|max:20|unique:m_user,username,' . $id . ',user_id',
+                'nama'     => 'required|max:100',
+                'password' => 'nullable|min:6|max:20'
+            ];
 
-        // Validasi input
-        $validator = Validator::make($request->all(), $rules);
+            // Validasi input
+            $validator = Validator::make($request->all(), $rules);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'status'   => false, // false berarti validasi gagal
-                'message'  => 'Validasi gagal.',
-                'msgField' => $validator->errors() // Field yang error
-            ]);
-        }
-
-        // Cek apakah data pengguna ditemukan
-        $user = UserModel::find($id);
-
-        if ($user) {
-            // Jika password tidak diisi, hapus dari request agar tidak diupdate
-            if (!$request->filled('password')) {
-                $request->request->remove('password');
+            if ($validator->fails()) {
+                return response()->json([
+                    'status'   => false, // false berarti validasi gagal
+                    'message'  => 'Validasi gagal.',
+                    'msgField' => $validator->errors() // Field yang error
+                ]);
             }
 
-            // Update data pengguna
-            $user->update($request->all());
+            // Cek apakah data pengguna ditemukan
+            $user = UserModel::find($id);
 
-            return response()->json([
-                'status'  => true,
-                'message' => 'Data berhasil diupdate'
-            ]);
-        } else {
-            return response()->json([
-                'status'  => false,
-                'message' => 'Data tidak ditemukan'
-            ]);
+            if ($user) {
+                // Jika password tidak diisi, hapus dari request agar tidak diupdate
+                if (!$request->filled('password')) {
+                    $request->request->remove('password');
+                }
+
+                // Update data pengguna
+                $user->update($request->all());
+
+                return response()->json([
+                    'status'  => true,
+                    'message' => 'Data berhasil diupdate'
+                ]);
+            } else {
+                return response()->json([
+                    'status'  => false,
+                    'message' => 'Data tidak ditemukan'
+                ]);
+            }
         }
+
+        return redirect('/');
     }
 
-    return redirect('/');
-}
+    public function confirm_ajax(string $id){
+        $user = UserModel::find($id);
+
+        return view('user.confirm_ajax', ['user' => $user]);
+    }
+
+    public function delete_ajax(Request $request, $id)
+    {
+        // cek apakah request dari ajax
+        if ($request->ajax() || $request->wantsJson()) {
+            $user = UserModel::find($id);
+            if ($user) {
+                $user->delete();
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Data berhasil dihapus'
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Data tidak ditemukan'
+                ]);
+            }
+        }
+
+        return redirect('/');
+    }
 
 
 
