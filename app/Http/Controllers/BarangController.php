@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Pdf;
+use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
+use Illuminate\Support\Facades\Facade;
 
 class BarangController extends Controller
 {
@@ -425,5 +428,22 @@ class BarangController extends Controller
         header('Pragma: public');
         $writer->save('php://output');
         exit;
+    }
+
+    public function export_pdf(){
+        $barang= BarangModel::select('kategori_id', 'barang_kode', 'barang_nama', 'harga_beli', 'harga_jual')
+        ->orderBy('kategori_id')
+        ->orderBy('barang_kode')
+        ->with('kategori')
+        ->get()
+        ;
+
+        $pdf = FacadePdf::loadview('barang.export_pdf', ['barang' => $barang]);
+        $pdf->setPaper('A4', 'portrait');
+        $pdf->setOption("isRemoteEnabled", true);
+        $pdf->render();
+
+        return $pdf->stream('Data Barang '.date('Y-m-d H:i:s').'.pdf');
+
     }
 }
