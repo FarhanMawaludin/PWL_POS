@@ -7,6 +7,7 @@ use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProfileController;
 use App\Models\SupplierModel;
 use Illuminate\Support\Facades\Route;
 
@@ -49,6 +50,7 @@ Route::middleware(['auth'])->group(function () {
 
 Route::get('/',[WelcomeController::class,'index']);
 Route::post('/logout',[AuthController::class,'logout']);
+Route::post('/profile/update-avatar', [ProfileController::class, 'updateAvatar']);
 
 
 

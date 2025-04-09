@@ -69,11 +69,12 @@
             
             <!-- Tombol Logout -->
             <li class="nav-item mt-5">
-                <form action="{{ url('/logout') }}" method="POST">
+                <a href="#" class="nav-link text-danger" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    <i class="nav-icon fas fa-sign-out-alt"></i>
+                    <p>Logout</p>
+                </a>
+                <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
                     @csrf
-                    <button type="submit" class="btn btn-danger btn-block">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </button>
                 </form>
             </li>
         </ul>
