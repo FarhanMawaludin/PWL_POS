@@ -54,8 +54,6 @@ Route::post('/logout',[AuthController::class,'logout']);
 Route::post('/profile/update-avatar', [ProfileController::class, 'updateAvatar']);
 
 
-
-
 Route::middleware(['authorize:ADM'])->group(function(){
     Route::group(['prefix' => 'user'], function () {
         Route::get('/', [UserController::class, 'index']);
